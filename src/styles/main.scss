@@ -23,6 +23,30 @@ html {
   height: 100%;
   overflow: hidden;
   background-color: #ddd;
+  /* 为了层级关系将 .img-figure 放入 .img-sec，
+    为了性能使用 @at-root 将 .img-figure 到与 .img-sec 同级  */
+  @at-root {
+    .img-figure {
+      position: absolute;
+      width: 320px;
+      height: 360px;
+      margin: 0;
+      padding: 40px;
+      background-color: #fff;
+      /* border-box width 将包含 padding */
+      box-sizing: border-box;
+    }
+
+    figcaption {
+      text-align: center;
+
+      .img-title {
+        margin: 20px 0 0;
+        color: #a7a0a2;
+        font-size: 16px;
+      }
+    }
+  }
 }
 /* image -- end */
 /* controller -- start */
