@@ -17,12 +17,27 @@ const imageDatas = imageJsonDatas.map((image) => {
 class ImgFigure extends Component {
     constructor(props) {
         super(props);
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    // 处理 imgFigure 的点击处理
+    handleClick(e) {
+
+        let {isCenter} = this.props.arrange;
+        if (isCenter) {
+            this.props.inverse()
+        } else {
+            this.props.center()
+        }
+
+        e.stopPropagation();
+        e.preventDefault();
     }
 
     render() {
         let styleObj = {};
 
-        let {pos, rotate} = this.props.arrange;
+        let {pos, rotate, isInverse, desc, isCenter} = this.props.arrange;
 
         // 设置图片位置
         if (pos) {
@@ -36,13 +51,26 @@ class ImgFigure extends Component {
             })
         }
 
+        // 图片翻转
+        let imgFigureClassName = 'img-figure';
+        imgFigureClassName += isInverse ? ' is-inverse' : '';
+
+        if (isCenter) {
+            styleObj.zIndex = 11;
+        }
+
         return (
-            <figure className="img-figure" style={styleObj}>
+            <figure className={imgFigureClassName} style={styleObj} onClick={this.handleClick}>
                 <img src={this.props.data.imageUrl}
                      alt={this.props.data.title}
                 />
                 <figcaption>
                     <h2 className="img-title">{this.props.data.title}</h2>
+                    <div className="img-back" onClick={this.handleClick}>
+                        <p>
+                            {desc}
+                        </p>
+                    </div>
                 </figcaption>
             </figure>
         );
@@ -78,7 +106,11 @@ export default class AppComponent extends Component {
                 //     top: 0
                 // },
                 // // 图片旋转角度
-                // rotate:0
+                // rotate:0,
+                // // 图片正反面
+                // isInverse: false,
+                // // 图片是否居中
+                // isCenter: false,
             }]
         }
 
@@ -147,7 +179,8 @@ export default class AppComponent extends Component {
         centerImgs = imgsArrangeArr.splice(centerIndex, 1);
         centerImgs[0] = {
             pos: centerPos,
-            rotate: 0
+            rotate: 0,
+            isCenter: true
         };
 
         // 处理 上部图片
@@ -160,7 +193,8 @@ export default class AppComponent extends Component {
                     top: getRangeRandom(topSection.y[0], topSection.y[1]),
                     left: getRangeRandom(topSection.x[0], topSection.x[1])
                 },
-                rotate: get30DegRandom()
+                rotate: get30DegRandom(),
+                isCenter: false
             }
         });
 
@@ -180,7 +214,8 @@ export default class AppComponent extends Component {
                     top: getRangeRandom(section.y[0], section.y[1]),
                     left: getRangeRandom(section.x[0], section.x[1])
                 },
-                rotate: get30DegRandom()
+                rotate: get30DegRandom(),
+                isCenter: false
             }
         }
 
@@ -194,11 +229,24 @@ export default class AppComponent extends Component {
         }
 
         this.setState({
-            imgsArrangeArr: imgsArrangeArr
+            imgsArrangeArr
         })
 
     }
 
+    // 翻转图片
+    inverse(index) {
+        let {imgsArrangeArr} = this.state;
+        imgsArrangeArr[index].isInverse = !imgsArrangeArr[index].isInverse;
+        this.setState({
+            imgsArrangeArr
+        })
+    }
+
+    // 居中图片
+    center(index) {
+        this.inverse(index);
+    }
 
     render() {
         let controllerUnits = [];
@@ -212,11 +260,15 @@ export default class AppComponent extends Component {
                         left: 0,
                         top: 0
                     },
-                    rotate: 0
+                    rotate: 0,
+                    isInverse: false,
+                    isCenter: false
                 }
             }
             const commonProps = {
-                arrange: this.state.imgsArrangeArr[index]
+                arrange: this.state.imgsArrangeArr[index],
+                inverse: () => this.inverse(index),
+                center: () => this.rearrange(index)
             };
             imgFigures.push(<ImgFigure
                 key={index}

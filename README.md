@@ -199,6 +199,46 @@ if (rotate) {
 }
 ```
 
+### 设置图片正反翻转、居中
+设置修改 state.isInverse 的方法：
+```javascript
+inverse(index) {
+    let {imgsArrangeArr} = this.state;
+    imgsArrangeArr[index].isInverse = !imgsArrangeArr[index].isInverse;
+    this.setState({
+        imgsArrangeArr
+    })
+}
+```
+
+```javascript
+let imgFigureClassName = 'img-figure';
+imgFigureClassName += isInverse ? ' is-inverse' : '';
+```
+
+视图中 `onClick` 方法：
+```javascript
+<figure className={imgFigureClassName} style={styleObj} onClick={this.handleClick}>
+</figure>
+```
+
+处理点击方法：
+```javascript
+handleClick(e) {
+
+    let {isCenter} = this.props.arrange;
+    if (isCenter) {
+        this.props.inverse()
+    } else {
+        this.props.center()
+    }
+
+    e.stopPropagation();
+    e.preventDefault();
+}
+
+```
+
 
 > Reference:
 > - [React 实战 —— 打造画廊应用](http://www.imooc.com/video/11739)
