@@ -98,6 +98,9 @@ yo react-webpack:component my/namespaced/components/name --stateless
 ## 舞台与图片组件构建
 ### 舞台构建
 安装 [postcss/autoprefixer: Parse CSS and add vendor prefixes to rules by Can I Use](https://github.com/postcss/autoprefixer)
+
+> 待确认是否需要：autoprefixer
+
 ``` bash
 npm install autoprefixer-loader --save-dev
 ```
@@ -117,9 +120,7 @@ npm install autoprefixer-loader --save-dev
 },
 ```
 
-> 待确认：autoprefixer
-
-VCD 原则：view controller data。
+VCD 原则：View Controller Data。
 
 创建 `src/sources/imageDatas.json`
 ``` json
@@ -134,7 +135,6 @@ VCD 原则：view controller data。
     "title": "Heaven of time",
     "desc": "Here he comes Here comes Speed Racer."
   },
-  ...
 ]
 ```
 
@@ -170,6 +170,15 @@ class ImgFigure extends React.Component {
     }
 }
 ```
+
+- scrollWidth：对象的实际内容的宽度，不包边线宽度，会随对象中内容超过可视区后而变大。
+- clientWidth：对象内容的可视区的宽度，不包滚动条等边线，会随对象显示大小的变化而改变。
+- offsetWidth：对象整体的实际宽度，包滚动条等边线，会随对象显示大小的变化而改变。
+
+通过 `this.Constant` 初始化图片区域范围，在 `componentDidMount` 计算设置数值。
+
+通过 `rearrange(centerIndex){}` 给每一个图片设置位置值。
+
 
 > Reference:
 > - [React 实战 —— 打造画廊应用](http://www.imooc.com/video/11739)
