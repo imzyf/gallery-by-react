@@ -95,8 +95,7 @@ yo react-webpack:component my/namespaced/components/name --stateless
 |---webpack.config.js         # webpack配置文件，不同环境的配置项在cfg目录下
 ```
 
-## 舞台与图片组件构建
-### 舞台构建
+## 舞台构建
 安装 [postcss/autoprefixer: Parse CSS and add vendor prefixes to rules by Can I Use](https://github.com/postcss/autoprefixer)
 
 > 待确认是否需要：autoprefixer
@@ -153,7 +152,7 @@ const imageDatas = imageJsonDatas.map((image) => {
 });
 ```
 
-### 图片组件构建
+## 图片组件构建
 ``` javascript
 class ImgFigure extends React.Component {
     render() {
@@ -171,6 +170,7 @@ class ImgFigure extends React.Component {
 }
 ```
 
+### 设置图片位置
 - scrollWidth：对象的实际内容的宽度，不包边线宽度，会随对象中内容超过可视区后而变大。
 - clientWidth：对象内容的可视区的宽度，不包滚动条等边线，会随对象显示大小的变化而改变。
 - offsetWidth：对象整体的实际宽度，包滚动条等边线，会随对象显示大小的变化而改变。
@@ -178,6 +178,26 @@ class ImgFigure extends React.Component {
 通过 `this.Constant` 初始化图片区域范围，在 `componentDidMount` 计算设置数值。
 
 通过 `rearrange(centerIndex){}` 给每一个图片设置位置值。
+
+### 设置图片旋转
+设置图片旋转角度，思路和设置图片位置一样：
+```javascript
+topImgs[index] = {
+    pos: {
+        top: getRangeRandom(topSection.y[0], topSection.y[1]),
+        left: getRangeRandom(topSection.x[0], topSection.x[1])
+    },
+    rotate: get30DegRandom()
+}
+```
+设置角度样式，兼容游览器：
+```javascript
+if (rotate) {
+    (['MozTransform', 'msTransform', 'Webkittransform', 'transform']).forEach((value) => {
+        styleObj[value] = 'rotate(' + rotate + 'deg)'
+    })
+}
+```
 
 
 > Reference:

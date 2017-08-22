@@ -6,7 +6,7 @@ import {findDOMNode} from 'react-dom';
 
 // 获取图片相关的数据 直接使用 loader
 import imageJsonDatas from 'json!../data/imageDatas.json';
-import {getRangeRandom} from '../util/util';
+import {getRangeRandom, get30DegRandom} from '../util/util';
 
 
 const imageDatas = imageJsonDatas.map((image) => {
@@ -20,12 +20,21 @@ class ImgFigure extends Component {
     }
 
     render() {
-
         let styleObj = {};
-        if (this.props.arrange.pos) {
-            styleObj = this.props.arrange.pos;
+
+        let {pos, rotate} = this.props.arrange;
+
+        // 设置图片位置
+        if (pos) {
+            styleObj = pos;
         }
 
+        // 设置旋转角度
+        if (rotate) {
+            (['MozTransform', 'msTransform', 'Webkittransform', 'transform']).forEach((value) => {
+                styleObj[value] = 'rotate(' + rotate + 'deg)'
+            })
+        }
 
         return (
             <figure className="img-figure" style={styleObj}>
@@ -62,7 +71,15 @@ export default class AppComponent extends Component {
             }
         };
         this.state = {
-            imgsArrangeArr: [],
+            imgsArrangeArr: [{
+                // // 图片定位
+                // pos:{
+                //     left: 0,
+                //     top: 0
+                // },
+                // // 图片旋转角度
+                // rotate:0
+            }]
         }
 
     }
@@ -128,18 +145,24 @@ export default class AppComponent extends Component {
 
         // 处理 中心图片
         centerImgs = imgsArrangeArr.splice(centerIndex, 1);
-        centerImgs[0].pos = centerPos;
+        centerImgs[0] = {
+            pos: centerPos,
+            rotate: 0
+        };
 
         // 处理 上部图片
         topImgsIndex = Math.random() * (imgsArrangeArr.length - 1  );
         topImgs = imgsArrangeArr.splice(Math.floor(topImgsIndex), topImgsNum);
         // topImgs 最多只有一个值，通过遍历总不会错
         topImgs.forEach((value, index) => {
-            topImgs[index].pos = {
-                top: getRangeRandom(topSection.y[0], topSection.y[1]),
-                left: getRangeRandom(topSection.x[0], topSection.x[1]),
+            topImgs[index] = {
+                pos: {
+                    top: getRangeRandom(topSection.y[0], topSection.y[1]),
+                    left: getRangeRandom(topSection.x[0], topSection.x[1])
+                },
+                rotate: get30DegRandom()
             }
-        })
+        });
 
         // 处理 两侧图片
         for (let i = 0, j = imgsArrangeArr.length, k = j / 2; i < j; i++) {
@@ -152,9 +175,12 @@ export default class AppComponent extends Component {
                 section = rightSection;
             }
 
-            imgsArrangeArr[i].pos = {
-                top: getRangeRandom(section.y[0], section.y[1]),
-                left: getRangeRandom(section.x[0], section.x[1]),
+            imgsArrangeArr[i] = {
+                pos: {
+                    top: getRangeRandom(section.y[0], section.y[1]),
+                    left: getRangeRandom(section.x[0], section.x[1])
+                },
+                rotate: get30DegRandom()
             }
         }
 
@@ -175,8 +201,8 @@ export default class AppComponent extends Component {
 
 
     render() {
-        var controllerUnits = [];
-        var imgFigures = [];
+        let controllerUnits = [];
+        let imgFigures = [];
 
         imageDatas.forEach((value, index) => {
             // 初始化每一个图片位置
@@ -186,10 +212,11 @@ export default class AppComponent extends Component {
                         left: 0,
                         top: 0
                     },
+                    rotate: 0
                 }
             }
             const commonProps = {
-                arrange: this.state.imgsArrangeArr[index],
+                arrange: this.state.imgsArrangeArr[index]
             };
             imgFigures.push(<ImgFigure
                 key={index}
