@@ -11,7 +11,7 @@ npm install -g yo
 yo --version
 ```
 
-安装 generator-react-webpack [Yeoman generator for ReactJS and Webpack](https://github.com/react-webpack-generators/generator-react-webpack)
+安装脚手架 generator-react-webpack [Yeoman generator for ReactJS and Webpack](https://github.com/react-webpack-generators/generator-react-webpack)
 ``` bash
 npm install -g generator-react-webpack
 ```
@@ -37,7 +37,7 @@ yo react-webpack gallery-by-react
 
 启动服务，根据 `package.json` 中的 `scripts` 可以看出。
 ``` bash
-npm start
+npm run start
 ```
 
 <!-- more -->
@@ -67,29 +67,32 @@ yo react-webpack:component my/namespaced/components/name --stateless
 
 关于 `generator-react-webpack` 目录结构大变样，已经是只需要 `webpack` 就能启动项目，其目录：
 ``` bash
-|---.babelrc  ES6 配置文件
-|---.editorconfig  EditorConfig 插件配置文件，用于统一编码风格。
-|---.eslintrc  ESLint 配置文件
-|---.gitignore  需要 git 同步时忽略文件夹的配置文件
-|---.yo-rc.json  未知
 |---cfg  这里存放 webpack 配置
 | |---base.js  webpack 基础配置
 | |---defaults.js  webpack 一些其他的默认配置
-| |---dev.js  测试环境的 webpack 配置，启动 npm run start 的时候会使用这份 webpack 设置。
-| |---dist.js  线上环境的 webpack 配置，启 动npm run dist 的时候会使用。
-| |---test.js  做单元测试的时候使用，npm run test
-|---dist  webpack 输出目录
-| |---README.md
-| |---static
-| | |---favicon.ico
-| | |---README.md
-|---karma.conf.js  单元测试配置文件
-|---npm-debug.log  日志文件
-|---package.json  重要！包结构配置文件，并且存放了启动脚本，npm script
-|---server.js  node 服务器，用于本地启动这个项目，正是这个脚本启动了 webpack 编译。
-|---src  源代码目录
-|---test  单元测试目录
-|---webpack.config.js  重要，webpack 配置文件入口
+| |---dev.js       测试环境的 webpack 配置，启动 npm run start 的时候会使用这份 webpack 设置。
+| |---dist.js      线上环境的 webpack 配置，启动 npm run dist 的时候会使用。
+| |---test.js      做单元测试的时候使用 npm run test。
+|---dist           webpack 存放最终打包输出的用于生产环境的项目文件
+|---src                       # 存放开发环境项目源码
+| |---/actions/               # flux actions目录（没用到）
+| |---/components/            # 组件目录
+| |---/config/                # 配置目录（没用到）
+| |---/sources/               # flux datasources目录（没用到）
+| |---/stores/                # flux stores(没用到)
+| |---/styles/                # 样式文件目录，内有一个App.css基础css文件
+| |---index.html              # 项目入口文件
+| |---index.js                # js入口文件
+|---/test/                    # 单元测试和集成测试目录
+|---.babelrc                  # Babel 配置文件
+|---.editorconfig             # EditorConfig 插件配置文件，用于统一编码风格。
+|---.eslintrc                 # ESLint代码风格检测配置文件
+|---.gitignore                # 需要 git 同步时忽略文件夹的配置文件
+|---.yo-rc.json               # yeoman的配置文件
+|---karma.conf.js             # karma测试框架的配置
+|---package.json              # npm 的依赖配置项
+|---server.js                 # 项目运行的js文件，命令可查看package.json中的script
+|---webpack.config.js         # webpack配置文件，不同环境的配置项在cfg目录下
 ```
 
 ## 舞台与图片组件构建
@@ -114,7 +117,9 @@ npm install autoprefixer-loader --save-dev
 },
 ```
 
-VCD 原则：view controller data
+> 待确认：autoprefixer
+
+VCD 原则：view controller data。
 
 创建 `src/sources/imageDatas.json`
 ``` json
@@ -129,6 +134,7 @@ VCD 原则：view controller data
     "title": "Heaven of time",
     "desc": "Here he comes Here comes Speed Racer."
   },
+  ...
 ]
 ```
 
@@ -137,33 +143,14 @@ VCD 原则：view controller data
 npm install --save-dev json-loader
 ```
 
-json 中获取图片路径
+json 中获取图片路径 ES6：
 ``` javascript
-// 获取图片相关的数据 直接使用 loader
-let imageDatas = require('json!../sources/imageDatas.json');
+import imageJsonDatas from 'json!../data/imageDatas.json';
 
-function getImageURL(imageDatasArr) {
-    for (var i = 0; i < imageDatasArr.length; i++) {
-        var singleImageData = imageDatasArr[i];
-        singleImageData.imageURL = require('../images/' + singleImageData.fileName);
-        imageDatasArr[i] = singleImageData;
-    }
-
-    return imageDatasArr;
-}
-imageDatas = getImageURL(imageDatas);
-
-// 可以修改为:
-// 利用自执行函数，将图片名信息转成图片URL路径信息
-imageDatas = (function getImageURL(imageDatasArr) {
-    for (var i = 0; i < imageDatasArr.length; i++) {
-        var singleImageData = imageDatasArr[i];
-        singleImageData.imageURL = require('../images/' + singleImageData.fileName);
-        imageDatasArr[i] = singleImageData;
-    }
-
-    return imageDatasArr;
-})(imageDatas);
+const imageDatas = imageJsonDatas.map((image) => {
+    image.imageUrl = require('../images/' + image.fileName);
+    return image;
+});
 ```
 
 ### 图片组件构建
@@ -172,7 +159,7 @@ class ImgFigure extends React.Component {
     render() {
         return (
             <figure className="img-figure">
-                <img src={this.props.data.imageURL}
+                <img src={this.props.data.imageUrl}
                     alt={this.props.data.title}
                 />
                 <figcaption>
@@ -184,8 +171,6 @@ class ImgFigure extends React.Component {
 }
 ```
 
-
-
-
 > Reference:
-> - [react实践介绍-慕课网](http://www.imooc.com/video/11739)
+> - [React 实战 —— 打造画廊应用](http://www.imooc.com/video/11739)
+> - [ckinmind/gallery-by-react](https://github.com/ckinmind/gallery-by-react)

@@ -1,61 +1,65 @@
 body,
 html {
-  width: 100%;
-  height: 100%;
-  background-color: #222;
+    width: 100%;
+    height: 100%;
+    background-color: #222;
 }
 
 .content {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
+
 /* stage -- start */
 .stage {
-  position: relative;
-  width: 100%;
-  height: 680px;
+    position: relative;
+    width: 100%;
+    height: 680px;
 }
+
 /* stage -- end */
 /* image -- start */
 .img-sec {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background-color: #ddd;
-  /* 为了层级关系将 .img-figure 放入 .img-sec，
-    为了性能使用 @at-root 将 .img-figure 到与 .img-sec 同级  */
-  @at-root {
-    .img-figure {
-      position: absolute;
-      width: 320px;
-      height: 360px;
-      margin: 0;
-      padding: 40px;
-      background-color: #fff;
-      /* border-box width 将包含 padding */
-      box-sizing: border-box;
-    }
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #ddd;
+    /* 为了层级关系将 .img-figure 放入 .img-sec，
+      为了性能使用 @at-root 将 .img-figure 到与 .img-sec 同级  */
+    @at-root {
+        .img-figure {
+            position: absolute;
+            width: 320px;
+            height: 360px;
+            margin: 0;
+            padding: 40px;
+            background-color: #fff;
+            /* border-box width 将包含 padding */
+            box-sizing: border-box;
+        }
 
-    figcaption {
-      text-align: center;
+        figcaption {
+            text-align: center;
 
-      .img-title {
-        margin: 20px 0 0;
-        color: #a7a0a2;
-        font-size: 16px;
-      }
+            .img-title {
+                margin: 20px 0 0;
+                color: #a7a0a2;
+                font-size: 16px;
+            }
+        }
     }
-  }
 }
+
 /* image -- end */
 /* controller -- start */
 .controller-nav {
-  position: absolute;
-  left: 0;
-  bottom: 30px;
-  z-index: 101;
-  width: 100%;
-  text-align: center;
+    position: absolute;
+    left: 0;
+    bottom: 30px;
+    z-index: 101;
+    width: 100%;
+    text-align: center;
 }
+
 /* controller -- end */
