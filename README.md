@@ -236,9 +236,25 @@ handleClick(e) {
     e.stopPropagation();
     e.preventDefault();
 }
-
 ```
 
+### 设置过渡动画
+补间动画：
+```css
+transition: transform .6s ease-in-out,left .6s ease-in-out, top .6s ease-in-out;
+```
+
+更自然的图片翻转，翻转时转轴同时移动：
+```css
+transform-origin: 0 50% 0; /* 50% 50% 0 */
+    
+    transform: translate(0) rotateY(180deg);
+```
+
+增强透视，父节点添加：
+```css
+perspective: 1800px;
+```
 
 > Reference:
 > - [React 实战 —— 打造画廊应用](http://www.imooc.com/video/11739)

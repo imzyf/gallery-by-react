@@ -37,7 +37,7 @@ class ImgFigure extends Component {
     render() {
         let styleObj = {};
 
-        let {pos, rotate, isInverse, desc, isCenter} = this.props.arrange;
+        let {pos, rotate, isInverse, isCenter} = this.props.arrange;
 
         // 设置图片位置
         if (pos) {
@@ -68,7 +68,7 @@ class ImgFigure extends Component {
                     <h2 className="img-title">{this.props.data.title}</h2>
                     <div className="img-back" onClick={this.handleClick}>
                         <p>
-                            {desc}
+                            {this.props.data.desc}
                         </p>
                     </div>
                 </figcaption>
@@ -241,11 +241,6 @@ export default class AppComponent extends Component {
         this.setState({
             imgsArrangeArr
         })
-    }
-
-    // 居中图片
-    center(index) {
-        this.inverse(index);
     }
 
     render() {
