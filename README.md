@@ -1,4 +1,35 @@
 # React 画廊应用
+## 介绍
+源于学习 MOOC React 实战 —— 打造画廊应用。
+
+> Thanks:
+> - [React 实战 —— 打造画廊应用](http://www.imooc.com/video/11739)
+> - [ckinmind/gallery-by-react](https://github.com/ckinmind/gallery-by-react)
+> - [Wobugaosuni/galleryByReact](https://github.com/Wobugaosuni/galleryByReact)
+
+### 功能
+- 图片分布：
+ - 中心区域：1 张图。
+ - 上部区域：至多 1 张图
+ - 两侧区域：剩下的图
+- 除中心区域，图片在 ±30° 随机旋转。
+- 点击中心区域图片，图片翻转，显示描述。
+- 点击除中心区域图片，与中心图片互换位置。
+- 圆点导航栏：
+  - 位于中心区域图片所在的导航点，高亮显示。点击该圆点，图片翻转，显示描述。
+  - 除中心区域图片所在的导航点，被点击时，与中心图片互换位置。
+
+### 技术栈
+- 使用 `React` 框架完成画廊页面制作。
+- 使用 `ES6` 语法。 
+- 使用 `YEOMAN` 搭建项目，生成项目文件、代码结构。
+- 使用 `Webpack` 实现前端自动化。
+- 使用 `HTML5` 新增标签，如 `<section>、<figure>、<figcaption>、<nav>` 等。
+- 使用 `SCSS` 编译器将 SCSS 文件编译成 CSS 文件。
+- 使用 `CSS3` 的transition属性，实现旋转、平移、背景色的逐渐过渡。
+- 使用 `Iconfont` 字体文件代替图片文件，支持 CSS3 对字体的修饰效果。
+- 使用 `json` 格式存放图片信息。
+
 ## 项目搭建
 ### 生成项目
 安装 yeoman [The web's scaffolding tool for modern webapps | Yeoman](http://yeoman.io/)
@@ -96,29 +127,6 @@ yo react-webpack:component my/namespaced/components/name --stateless
 ```
 
 ## 舞台构建
-安装 [postcss/autoprefixer: Parse CSS and add vendor prefixes to rules by Can I Use](https://github.com/postcss/autoprefixer)
-
-> 待确认是否需要：autoprefixer
-
-``` bash
-npm install autoprefixer-loader --save-dev
-```
-
-修改 `cfg/defaults.js` 将：
-``` javascript
-{
-	test: /\.scss/,
-	loader: 'style-loader!css-loader!sass-loader?outputStyle=expanded'
-},
-```
-改为：
-``` javascript
-{
-	test: /\.scss/,
-	loader: 'style-loader!css-loader!autoprefixer-loader?{browser:["last 2 version"]}!sass-loader?outputStyle=expanded'
-},
-```
-
 VCD 原则：View Controller Data。
 
 创建 `src/sources/imageDatas.json`
@@ -289,6 +297,18 @@ test: /\.(png|jpg|gif|woff|woff2)$/,
 test: /\.(png|jpg|gif|woff|woff2|eot|ttf|svg)$/,
 ```
 
+屏幕渲染机制有两种：
+- 灰阶渲染：控制边缘亮度，所耗内存相对较低，应用于手机。
+- 亚像素渲染：效果更好，所耗内存相对更高，应用于 Mac 等。
+
+Mac 上有些浅色字体图片（在上面设置了白色，可以设置为深色进行测试）在浏览器上显得较粗，解决方案：
+
+在父元素上设置属性，修改浏览器的属性：
+```css
+-webkit-font-smoothing: antialiased;  /* 开启 chrome 在 Mac 下字体渲染的灰阶平滑 */
+-moz-osx-font-smoothing: grayscale;   /* 开启 firefox 在 Mac 下字体渲染的灰阶平滑 */
+```
+
 ### 事件响应
 ```css
 let {isInverse, isCenter} = this.props.arrange;
@@ -303,8 +323,37 @@ if (isCenter) {
 }
 ```
 
+## GitHub Page 发布
+GitHub Page 需要使用相对路径，修改：
 
+`cfg/default.js`：
+```javascript
+publicPath: '/assets/',
 
-> Reference:
-> - [React 实战 —— 打造画廊应用](http://www.imooc.com/video/11739)
-> - [ckinmind/gallery-by-react](https://github.com/ckinmind/gallery-by-react)
+改为：
+publicPath: '/assets/',
+```
+
+`src/index.html`
+```html
+<script type="text/javascript" src="/assets/app.js"></script>
+
+改成：
+<script type="text/javascript" src="assets/app.js"></script>
+```
+
+然后打包项目：
+```
+npm run dist
+```
+
+将 `dist` 提交到 Git 仓库：
+``
+git add dist 
+git commit -m "release project" 
+``
+
+推送到 GitHub Page：
+```html
+git subtree push --prefix=dist origin gh-pages
+```
