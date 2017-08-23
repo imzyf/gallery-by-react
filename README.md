@@ -256,6 +256,39 @@ transform-origin: 0 50% 0; /* 50% 50% 0 */
 perspective: 1800px;
 ```
 
+## 控制组件
+```javascript
+render() {
+    return(
+        <span className="controller-unit" onClick={(e)=>this.handleClick(e)}></span>
+    );
+}
+```
+
+### 使用 Iconfont 添加箭头
+[Iconfont-阿里巴巴矢量图标库](http://www.iconfont.cn/)
+
+- Iconfont 的体积更小。
+- Iconfont 是矢量图，拉伸不变形，颜色可自行更换，支持 CSS3 对字体的修饰效果。
+
+```css
+@font-face {
+    font-family: 'icons-turn-arrow';
+    src: url('../fonts/icons/turn-arrow.eot') format('enbedded'),
+    url('../fonts/icons/turn-arrow.woff') format('woff'),
+    url('../fonts/icons/turn-arrow.ttf') format('truetype'),
+    url('../fonts/icons/turn-arrow.svg') format('svg');
+}
+```
+
+修改 `cfg/defaults.js`:
+```js
+test: /\.(png|jpg|gif|woff|woff2)$/,
+
+改为：
+test: /\.(png|jpg|gif|woff|woff2|eot|ttf|svg)$/,
+```
+
 > Reference:
 > - [React 实战 —— 打造画廊应用](http://www.imooc.com/video/11739)
 > - [ckinmind/gallery-by-react](https://github.com/ckinmind/gallery-by-react)

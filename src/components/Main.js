@@ -7,6 +7,7 @@ import {findDOMNode} from 'react-dom';
 // 获取图片相关的数据 直接使用 loader
 import imageJsonDatas from 'json!../data/imageDatas.json';
 import {getRangeRandom, get30DegRandom} from '../util/util';
+import ControllerUnit from 'components/ControllerUnit';
 
 
 const imageDatas = imageJsonDatas.map((image) => {
@@ -17,7 +18,7 @@ const imageDatas = imageJsonDatas.map((image) => {
 class ImgFigure extends Component {
     constructor(props) {
         super(props);
-        this.handleClick = this.handleClick.bind(this);
+        // this.handleClick = this.handleClick.bind(this);
     }
 
     // 处理 imgFigure 的点击处理
@@ -60,13 +61,13 @@ class ImgFigure extends Component {
         }
 
         return (
-            <figure className={imgFigureClassName} style={styleObj} onClick={this.handleClick}>
+            <figure className={imgFigureClassName} style={styleObj} onClick={(e) => this.handleClick(e)}>
                 <img src={this.props.data.imageUrl}
                      alt={this.props.data.title}
                 />
                 <figcaption>
                     <h2 className="img-title">{this.props.data.title}</h2>
-                    <div className="img-back" onClick={this.handleClick}>
+                    <div className="img-back" onClick={(e) => this.handleClick(e)}>
                         <p>
                             {this.props.data.desc}
                         </p>
@@ -270,6 +271,8 @@ export default class AppComponent extends Component {
                 data={value}
                 ref={'imgFigure' + index}
                 {...commonProps}/>);
+
+            controllerUnits.push(<ControllerUnit key={index}/>)
         });
 
         return (
