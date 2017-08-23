@@ -289,6 +289,22 @@ test: /\.(png|jpg|gif|woff|woff2)$/,
 test: /\.(png|jpg|gif|woff|woff2|eot|ttf|svg)$/,
 ```
 
+### 事件响应
+```css
+let {isInverse, isCenter} = this.props.arrange;
+
+let controllerUnitClassName = "controller-unit";
+if (isCenter) {
+    controllerUnitClassName += " is-center";
+
+    if (isInverse) {
+        controllerUnitClassName += " is-inverse";
+    }
+}
+```
+
+
+
 > Reference:
 > - [React 实战 —— 打造画廊应用](http://www.imooc.com/video/11739)
 > - [ckinmind/gallery-by-react](https://github.com/ckinmind/gallery-by-react)

@@ -91,6 +91,7 @@ html {
                 background-color: #fff;
 
                 box-sizing: border-box;
+                // 修复 safair
                 transform: rotateY(180deg) translateZ(1px);
                 backface-visibility: hidden;
 

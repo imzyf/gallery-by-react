@@ -272,7 +272,7 @@ export default class AppComponent extends Component {
                 ref={'imgFigure' + index}
                 {...commonProps}/>);
 
-            controllerUnits.push(<ControllerUnit key={index}/>)
+            controllerUnits.push(<ControllerUnit key={index} {...commonProps}/>)
         });
 
         return (
