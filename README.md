@@ -343,17 +343,29 @@ publicPath: '/assets/',
 ```
 
 然后打包项目：
-```
+```bash
 npm run dist
 ```
 
 将 `dist` 提交到 Git 仓库：
-``
+```bash
 git add dist 
 git commit -m "release project" 
-``
+```
 
 推送到 GitHub Page：
-```html
+```bash
 git subtree push --prefix=dist origin gh-pages
 ```
+
+改回代码：
+```bash
+git reset --hard
+```
+
+## TODO
+- [ ] CSS Modules, radium
+- [ ] React Flux
+- [ ] React Animation API
+- [ ] React Canvas
+
