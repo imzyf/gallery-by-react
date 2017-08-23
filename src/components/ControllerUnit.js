@@ -17,12 +17,12 @@ export default class ControllerUnit extends Component {
     render() {
         let {isInverse, isCenter} = this.props.arrange;
 
-        let controllerUnitClassName = "controller-unit";
+        let controllerUnitClassName = 'controller-unit';
         if (isCenter) {
-            controllerUnitClassName += " is-center";
+            controllerUnitClassName += ' is-center';
 
             if (isInverse) {
-                controllerUnitClassName += " is-inverse";
+                controllerUnitClassName += ' is-inverse';
             }
         }
 
