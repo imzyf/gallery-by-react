@@ -331,7 +331,7 @@ GitHub Page 需要使用相对路径，修改：
 publicPath: '/assets/',
 
 改为：
-publicPath: '/assets/',
+publicPath: 'assets/',
 ```
 
 `src/index.html`

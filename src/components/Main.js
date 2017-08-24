@@ -100,19 +100,21 @@ export default class AppComponent extends Component {
             }
         };
         this.state = {
-            imgsArrangeArr: [{
-                // // 图片定位
-                // pos:{
-                //     left: 0,
-                //     top: 0
-                // },
-                // // 图片旋转角度
-                // rotate:0,
-                // // 图片正反面
-                // isInverse: false,
-                // // 图片是否居中
-                // isCenter: false,
-            }]
+            imgsArrangeArr: [
+                //     {
+                //     // 图片定位
+                //     pos:{
+                //         left: 0,
+                //         top: 0
+                //     },
+                //     // 图片旋转角度
+                //     rotate:0,
+                //     // 图片正反面
+                //     isInverse: false,
+                //     // 图片是否居中
+                //     isCenter: false,
+                // }
+            ]
         }
 
     }
@@ -185,8 +187,8 @@ export default class AppComponent extends Component {
         };
 
         // 处理 上部图片
-        topImgsIndex = Math.random() * (imgsArrangeArr.length - 1  );
-        topImgs = imgsArrangeArr.splice(Math.floor(topImgsIndex), topImgsNum);
+        topImgsIndex = Math.floor(Math.random() * imgsArrangeArr.length);
+        topImgs = imgsArrangeArr.splice(topImgsIndex, topImgsNum);
         // topImgs 最多只有一个值，通过遍历总不会错
         topImgs.forEach((value, index) => {
             topImgs[index] = {
@@ -221,13 +223,11 @@ export default class AppComponent extends Component {
         }
 
         // 将中心、上部图片填回数组
-        if (centerImgs && centerImgs[0]) {
-            imgsArrangeArr.splice(centerIndex, 0, centerImgs[0])
-        }
-
         if (topImgs && topImgs[0]) {
             imgsArrangeArr.splice(topImgsIndex, 0, topImgs[0])
         }
+
+        imgsArrangeArr.splice(centerIndex, 0, centerImgs[0]);
 
         this.setState({
             imgsArrangeArr
@@ -242,6 +242,10 @@ export default class AppComponent extends Component {
         this.setState({
             imgsArrangeArr
         })
+    }
+
+    center(index) {
+        this.rearrange(index);
     }
 
     render() {
@@ -262,17 +266,18 @@ export default class AppComponent extends Component {
                 }
             }
             const commonProps = {
+                key: index,
                 arrange: this.state.imgsArrangeArr[index],
                 inverse: () => this.inverse(index),
-                center: () => this.rearrange(index)
+                center: () => this.center(index)
             };
             imgFigures.push(<ImgFigure
-                key={index}
+                {...commonProps}
                 data={value}
                 ref={'imgFigure' + index}
-                {...commonProps}/>);
+            />);
 
-            controllerUnits.push(<ControllerUnit key={index} {...commonProps}/>)
+            controllerUnits.push(<ControllerUnit {...commonProps}/>)
         });
 
         return (
